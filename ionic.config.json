@@ -1,0 +1,7 @@
+{
+  "name": "pegadaEcologica",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
