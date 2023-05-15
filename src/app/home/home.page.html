@@ -1,6 +1,6 @@
 <ion-content [class]="classe" [fullscreen]="true">
 
-    
+
 
 
     <div class="botaoIniciar" *ngIf="telaLogin == true" (click)="iniciarPesquisa()">
@@ -18,40 +18,72 @@
         <img src="../../assets/imagens/adcionais/fechar.png">
     </div>
 
-    <ion-list class="centralPerguntas" *ngIf="telaLogin == false && telaFinal == false && classe !='duvida' && classe!= 'mundo'">
 
-        <ion-item *ngIf="form[0].nome" [title]="form[0].nome" color="transparent" lines="none" (click)="check(form[0])">
+    <ion-list class="centralPerguntas"
+        *ngIf="telaLogin == false && telaFinal == false && classe !='duvida' && classe!= 'mundo'">
+
+        <ion-item style="text-align: justify ;margin-left: 20%; margin-right: 20%;" *ngIf="form[0].nome"
+            [title]="form[0].nome" color="transparent" lines="none" (click)="check(form[0])">
             <ion-label color="light" style="font-size: small;"><b [innerHTML]="form[0].nome"></b></ion-label>
-            <ion-checkbox color="light" slot="start" [(ngModel)]="form[0].isChecked" [disabled]="!form[0].isChecked && checkeds === limit"></ion-checkbox>
+            <ion-checkbox (click)="editarSrIncrivel(form[0].valor, form[0].isChecked)" color="light" slot="start"
+                [(ngModel)]="form[0].isChecked" [disabled]="!form[0].isChecked && checkeds === limit"></ion-checkbox>
         </ion-item>
 
-        <ion-item *ngIf="form[1].nome" [title]="form[1].nome" color="transparent" lines="none" (click)="check(form[1])">
+        <ion-item style="text-align: justify ;margin-left: 20%; margin-right: 20%;" *ngIf="form[1].nome"
+            [title]="form[1].nome" color="transparent" lines="none" (click)="check(form[1])">
             <ion-label color="light" style="font-size: small;"><b [innerHTML]="form[1].nome"></b></ion-label>
-            <ion-checkbox color="light" slot="start" [(ngModel)]="form[1].isChecked" [disabled]="!form[1].isChecked && checkeds === limit"></ion-checkbox>
+            <ion-checkbox (click)="editarSrIncrivel(form[1].valor, form[1].isChecked)" color="light" slot="start"
+                [(ngModel)]="form[1].isChecked" [disabled]="!form[1].isChecked && checkeds === limit"></ion-checkbox>
         </ion-item>
 
-        <ion-item *ngIf="form[2].nome" [title]="form[2].nome" color="transparent" lines="none" (click)="check(form[2])">
+        <ion-item style="text-align: justify ;margin-left: 20%; margin-right: 20%;" *ngIf="form[2].nome"
+            [title]="form[2].nome" color="transparent" lines="none" (click)="check(form[2])">
             <ion-label color="light" style="font-size: small;"><b [innerHTML]="form[2].nome"></b></ion-label>
-            <ion-checkbox color="light" slot="start" [(ngModel)]="form[2].isChecked" [disabled]="!form[2].isChecked && checkeds === limit"></ion-checkbox>
+            <ion-checkbox (click)="editarSrIncrivel(form[2].valor, form[2].isChecked)" color="light" slot="start"
+                [(ngModel)]="form[2].isChecked" [disabled]="!form[2].isChecked && checkeds === limit"></ion-checkbox>
         </ion-item>
 
-        <ion-item *ngIf="form[3].nome" [title]="form[3].nome" color=transparent lines="none" (click)="check(form[3])">
+        <ion-item style="text-align: justify ;margin-left: 20%; margin-right: 20%;" *ngIf="form[3].nome"
+            [title]="form[3].nome" color=transparent lines="none" (click)="check(form[3])">
             <ion-label color="light" style="font-size: small;"><b [innerHTML]="form[3].nome"></b></ion-label>
-            <ion-checkbox color="light" slot="start" [(ngModel)]="form[3].isChecked" [disabled]="!form[3].isChecked && checkeds === limit"></ion-checkbox>
+            <ion-checkbox (click)="editarSrIncrivel(form[3].valor, form[3].isChecked)" color="light" slot="start"
+                [(ngModel)]="form[3].isChecked" [disabled]="!form[3].isChecked && checkeds === limit"></ion-checkbox>
         </ion-item>
 
-        <ion-item *ngIf="form[4].nome" [title]="form[4].nome" color=transparent lines="none" (click)="check(form[4])">
+        <ion-item style="text-align: justify ;margin-left: 20%; margin-right: 20%;" *ngIf="form[4].nome"
+            [title]="form[4].nome" color=transparent lines="none" (click)="check(form[4])">
             <ion-label color="light" style="font-size: small;"><b [innerHTML]="form[4].nome"></b></ion-label>
-            <ion-checkbox color="light" slot="start" [(ngModel)]="form[4].isChecked" [disabled]="!form[4].isChecked && checkeds === limit"></ion-checkbox>
+            <ion-checkbox color="light" slot="start" (click)="editarSrIncrivel(form[4].valor, form[4].isChecked)"
+                [(ngModel)]="form[4].isChecked" [disabled]="!form[4].isChecked && checkeds === limit"></ion-checkbox>
         </ion-item>
 
-        <p (click)="proximo()" style="cursor: pointer;">
-            <img width="60px" height="60px" src="../../assets/imagens/adcionais/avancar.png">
-        </p>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="1">
+
+                </ion-col>
+                <ion-col size="3">
+                    <!--                    <img  (click)="voltar()"  style="width:60px; height: 60px;position: absolute;top: 0; bottom: 0;left: 0; right: 0;margin: auto;" src="../../assets/imagens/adcionais/voltar.png"> -->
+                </ion-col>
+                <ion-col size="4">
+                    <img style="height: 150px; margin: auto;display: block;border-radius: 10px;" [src]="srIncrivel">
+                </ion-col>
+                <ion-col size="3">
+                    <img (click)="proximo()"
+                        style="width:60px; height: 60px;position: absolute;top: 0; bottom: 0;left: 0; right: 0;margin: auto;"
+                        src="../../assets/imagens/adcionais/avancar.png">
+                </ion-col>
+                <ion-col size="1">
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
     </ion-list>
 
 
-    <div *ngIf="telaFinal == true"  #screen id="table" >
+    <div *ngIf="telaFinal == true" #screen id="table">
         <ion-grid id="emprimir" style="background-color: #004179 !important;">
             <ion-row>
                 <ion-col size="12">
@@ -67,31 +99,36 @@
                         Em quantitativo, se todos vivessem como você, precisaria-mos de {{valor}} planetas terra.
                     </p>
                     <p style="text-align: center;">
-                        <img width="60%" src="../../assets/imagens/conclusao/terra.png" />
+                        <img width="60%" style="border-radius: 10px;" [src]="srIncrivel" />
+                        <!--<img width="60%" src="../../assets/imagens/conclusao/terra.png" />-->
                     </p>
                     <br>
                     <p style="color: #ffff; text-align: justify; font-size: 12px;">
-                        Este teste foi elaborado pela <b>Redefining Progress</b>, uma entidade conservacionista não-governamental (www.myfooprint.org).
-                        <br>Ele calcula a sua "Pegada Ecológica", ou seja, a área de terra necessária para atender as suas necessidades, fazendo uma estimativa ou quantidade de recursos necessarios para produzir os bens e serviços que você consome e absorver
-                        os residuos que você produz.
+                        &nbsp;Este teste foi elaborado pela <b>Redefining Progress</b>, uma entidade conservacionista
+                        não-governamental (www.myfooprint.org).
+                        <br>&nbsp;Ele calcula a sua "Pegada Ecológica", ou seja, a área de terra necessária para atender
+                        as suas necessidades, fazendo uma estimativa ou quantidade de recursos necessarios para produzir
+                        os bens e serviços que você consome e absorver
+                        os residuos que você produz.<br>&nbsp;O arquivo está disponível para download logo abaixo no
+                        icone á esquerda.
                     </p>
                 </ion-col>
             </ion-row>
         </ion-grid>
     </div>
 
-    <ion-grid  *ngIf="telaFinal == true" style="background-color: #004179 !important;">
+    <ion-grid *ngIf="telaFinal == true" style="background-color: #004179 !important;">
         <ion-row>
             <ion-col size="4">
-                <!--
-                <img width="65px" height="65px" src="../../assets/imagens/adcionais/world.png" />
-              -->
+<!--                <img width="65px" height="65px" (click)="compartilharPDF()" style="left: 0;margin-left: 5%;"
+                    src="../../assets/outros/pdf-icon.png" />-->
             </ion-col>
             <ion-col size="4" style="text-align: center;">
                 <img width="65px" height="65px" (click)="zerar()" src="../../assets/imagens/adcionais/inicio.png" />
             </ion-col>
             <ion-col size="4" style="text-align: center;">
-                <img width="65px" height="65px" (click)="downloadImage()" src="../../assets/imagens/adcionais/print.png" />
+                <img width="65px" height="65px" style="right: 0; margin-right: 5%;" (click)="downloadImage()"
+                    src="../../assets/imagens/adcionais/print.png" />
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -99,7 +136,10 @@
     <div style="width: 1px;height: 1px;" id="download">
         <img #canvas>
         <a #downloadLink></a>
-      </div>
+    </div>
 
-
+<!--    
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
+        style="width: 400px; height: 500px;"></pdf-viewer>
+-->
 </ion-content>

@@ -1,0 +1,9 @@
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore -pegadaEcologica.keystore  app-release.aab alias_pegadaEcologica
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore -pegadaEcologica.keystore  app-release-unsigned.apk alias_pegadaEcologica
+
+zipalign -v 4 app-release-unsigned.apk app.apk
+
+44029476
+
+Fonte utilizada : Snap ITC

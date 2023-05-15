@@ -1,7 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import html2canvas from 'html2canvas';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { AdMobFree } from '@ionic-native/admob-free/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +19,14 @@ export class HomePage {
   telaLogin: boolean;
   telaFinal: boolean;
 
+  valor_Sr_incrivel: number = 0;
+
   @ViewChild('screen') screen: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
 
+  srIncrivel: string = "../../assets/imagens/sr_incrivel/1.jpg";
 
   //Variaveis das opcoes
   public checkeds = 0;
@@ -36,10 +41,18 @@ export class HomePage {
   ];
 
   constructor(
-    private alertController: AlertController,
     private toastController: ToastController,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private admobFree: AdMobFree,
+    private iab: InAppBrowser
   ) { }
+
+  
+  compartilharPDF() {    
+    const browser = this.iab.create("https://maragojipe.ba.gov.br/atila-debug/Folheto.pdf", "_system");
+    browser.show();
+  }
+
 
   limparTabela() {
     this.form = [
@@ -50,32 +63,62 @@ export class HomePage {
       { nome: '', isChecked: false, valor: 0 }
     ]
   }
+
+
+
   async presentToast(mensagem, cor) {
     const toast = await this.toastController.create({
       message: mensagem,
       duration: 2000,
-      color: cor
+      color: cor,
+      icon: "alert"
     });
     toast.present();
   }
-  
-  downloadImage(){
+
+
+  downloadImage() {
     //npm i html2canvas
     html2canvas(this.screen.nativeElement, {
       useCORS: true,
     }).then(canvas => {
       this.canvas.nativeElement.src = canvas.toDataURL();
-      this.socialSharing.share(null, 'Android filename', 'data:image/png;base64,R0lGODlhDAAMALMBAP8AAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAUKAAEALAAAAAAMAAwAQAQZMMhJK7iY4p3nlZ8XgmNlnibXdVqolmhcRQA7', null).then((data) => {
-        this.presentToast(data, "#2dd36f");
+      this.downloadLink.nativeElement.download = 'pegada-ecologica.png';
+      this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
+      this.socialSharing.share("Se liga na minha pegada ecológica ....", null, this.downloadLink.nativeElement.href, "https://play.google.com/store/apps/details?id=dev.magalhaes").then((data) => {
+        //        this.showInterstitialAds();
       }).catch((error) => {
-        this.presentToast(error,"#eb445a");
+        this.presentToast("Lamento, não foi possível compartilhar.", "danger");
       });
       //      this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
-//      this.downloadLink.nativeElement.download = 'pegada-ecologica.png';
-//      this.downloadLink.nativeElement.click();
+      //      this.downloadLink.nativeElement.download = 'pegada-ecologica.png';
+      //      this.downloadLink.nativeElement.click();
     });
   }
-  
+
+  showInterstitialAds() {
+    let interstitialConfig = {
+      autoShow: true,
+      id: "ca-app-pub-2761093371755167/5619869366"
+    };
+    this.admobFree.interstitial.config(interstitialConfig);
+    this.admobFree.interstitial.prepare().then((data) => {
+      this.telaFinal = true;
+      this.classe = "conclusao";
+      this.valorPegada = parseFloat(((6 * this.valor) / 400).toFixed(2));
+      this.valor = parseFloat((this.valorPegada / 1.89).toFixed(2));
+    }).catch(e => {
+      this.presentToast(e, "danger");
+      this.telaFinal = true;
+      this.classe = "conclusao";
+      this.valorPegada = parseFloat(((6 * this.valor) / 400).toFixed(2));
+      this.valor = parseFloat((this.valorPegada / 1.89).toFixed(2));
+    });
+  }
+
+  ngOnInit(){
+  }
+
   ionViewWillEnter() {
     this.avancarTelas();
   }
@@ -84,17 +127,21 @@ export class HomePage {
     this.classe = "duvida";
     this.telaLogin = false;
   }
+
   pegadasMundiais() {
     this.classe = "mundo";
     this.telaLogin = false;
   }
-  avancarTelas() {
 
+
+
+  avancarTelas() {
     if (this.telaAtual == 0) {
       this.classe = "login";
       this.telaLogin = true;
       this.telaFinal = false;
       this.valor = 0;
+      this.valor_Sr_incrivel = 0;
       this.valorPegada = 0;
     }
     else if (this.telaAtual == 1) {
@@ -188,17 +235,48 @@ export class HomePage {
       this.elaborarPergunta18();
     }
     else {
-      this.telaFinal = true;
-      this.classe = "conclusao";
-      this.valorPegada = parseFloat(((6 * this.valor) / 400).toFixed(2));
-      this.valor = parseFloat((this.valorPegada / 1.89).toFixed(2));
+      this.showInterstitialAds();
     }
+
+  }
+
+
+
+  //ionChange está sendo executado quando troca de pergunta
+  editarSrIncrivel(valor: number, checado: boolean) {
+
+    if (checado == false)
+      this.valor_Sr_incrivel = this.valor_Sr_incrivel + valor;
+    else
+      this.valor_Sr_incrivel = this.valor_Sr_incrivel - valor;
+
+    //manipular o Sr Incrivel
+    if (this.valor_Sr_incrivel < 130) {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/1.jpg";
+    }
+    else if (this.valor_Sr_incrivel >= 130 && this.valor_Sr_incrivel <= 200) {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/2.jpg";
+    }
+    else if (this.valor_Sr_incrivel > 200 && this.valor_Sr_incrivel <= 500) {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/3.jpg";
+    }
+    else if (this.valor_Sr_incrivel > 500 && this.valor_Sr_incrivel <= 700) {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/4.jpg";
+    }
+    else if (this.valor_Sr_incrivel > 700 && this.valor_Sr_incrivel <= 900) {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/5.jpg";
+    }
+    else {
+      this.srIncrivel = "../../assets/imagens/sr_incrivel/6.jpg";
+    }
+    console.log("Valor Sr incrivel = " + this.valor_Sr_incrivel + "Checado = " + checado);
+
   }
 
   zerar() {
-    console.log("error");
     this.telaAtual = 0;
     this.ionViewWillEnter();
+    this.srIncrivel = "../../assets/imagens/sr_incrivel/1.jpg";
   }
   iniciarPesquisa() {
     this.telaAtual = 1;
@@ -545,10 +623,16 @@ export class HomePage {
       this.avancarTelas();
     }
     else {
-      this.presentAlert("Nenhuma opcao selecionada.");
+      this.presentToast("Selecione uma opção.", "light");
     }
     console.log("Acumulo atual : " + this.valor);
   }
+
+  voltar() {
+    if (this.valor == 0)
+      this.zerar();
+  }
+
 
   check(entry) {
     if (entry.isChecked) {
@@ -556,18 +640,6 @@ export class HomePage {
     } else {
       this.checkeds--;
     }
-  }
-  async presentAlert(mensagem) {
-    const alert = await this.alertController.create({
-      cssClass: 'primary',
-      message: mensagem,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
   }
 
   limparDados() {

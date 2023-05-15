@@ -1,5 +1,5 @@
 .login {
-    --background: url("../../assets/imagens/login/login2.png") 0 0/100% 100% no-repeat;
+    --background: url("../../assets/imagens/login/login1.png") 0 0/100% 100% no-repeat;
 }
 
 .q1 {
@@ -133,9 +133,9 @@
 
 .centralPerguntas {
     position: absolute;
-    margin-left: 20%;
-    margin-right: 20%;
-    width: 60%;
+//    margin-left: 20%;
+//    margin-right: 20%;
+    width: 100%;
     bottom: 0;
     background-color: transparent;
     text-align: center !important;
@@ -143,8 +143,8 @@
 
 .botaoFechar {
     cursor: pointer;
-    float: right;
-    margin-right: 2%;
+    float: left;
+    margin-left: 2%;
     margin-top: 2%;
     img {
         width: 65px;
